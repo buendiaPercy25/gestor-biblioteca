@@ -3,6 +3,9 @@ package service;
 import java.util.ArrayList;
 import java.util.List;
 
+import exceptions.LibroNoDisponibleException;
+import exceptions.LibroNoEncontradoException;
+import exceptions.UsuarioNoEncontradoException;
 import model.Libro;
 import model.Usuario;
 
@@ -31,7 +34,7 @@ public class Biblioteca {
         this.usuarios = usuarios;
     };
 
-    public void devolverLibro(int idUsuario, int idLibro){
+    public void devolverLibro(int idUsuario, int idLibro)throws UsuarioNoEncontradoException , LibroNoEncontradoException{
         
         for (Usuario usuario : usuarios) {
             if (usuario.getId() == idUsuario) {
@@ -44,30 +47,31 @@ public class Biblioteca {
                         return;
                     }
                 }
-                System.out.println("El usuario no Tiene ese libro ");
-                return;
+                throw new LibroNoEncontradoException ("-----EN LA LISTA DEL USUARIO NO EXISTE EL LIBRO. ");
             }
         }
-        System.out.println("Usuario no encontrado");
+        throw new UsuarioNoEncontradoException("------EL USUARIO NO EXISTE EN LA LISTA.");
     }
 
-    public void prestarLibro(int idUsuario, int idLibro) {
+    public void prestarLibro(int idUsuario, int idLibro) throws UsuarioNoEncontradoException, LibroNoEncontradoException , LibroNoDisponibleException {
 
-        for (Libro libro : catalogo) {
-            for (Usuario usuario : usuarios) {
-                if (libro.getId() == idLibro && usuario.getId() == idUsuario) {
-                    if (!(libro.isEstado() == true)) {
-                        System.out.println("El luibro no esta disponible");
-                        return;
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId()== idUsuario) {
+                for (Libro libro : catalogo) {
+                    if (libro.getId() == idLibro) {
+                        if ((libro.isEstado())) {
+                            libro.setEstado(false);
+                            usuario.agregarlibro(libro);
+                            usuario.mostraInfo();
+                            return;
+                        }
+                        throw new LibroNoDisponibleException("-----EL LIBRO NO ESTA DISPONIBLE.");
                     }
-                        libro.setEstado(false);
-
-                    usuario.agregarlibro(libro);
-                    usuario.mostraInfo();
-                    return;
                 }
+                throw new LibroNoEncontradoException("-----EL LIBRO NO EXISTE EN LA LISTA.");
             }
         }
+        throw new UsuarioNoEncontradoException("----EL USUARIO NO EXISTE EN LA LISTA.");
 
 
     }

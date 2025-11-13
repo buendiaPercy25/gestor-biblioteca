@@ -1,9 +1,11 @@
 package app;
 
-
 import java.util.Scanner;
 
-import model.Categoria; 
+import exceptions.LibroNoDisponibleException;
+import exceptions.LibroNoEncontradoException;
+import exceptions.UsuarioNoEncontradoException;
+import model.Categoria;
 import model.Libro;
 import model.Usuario;
 import service.Biblioteca;
@@ -14,25 +16,25 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         Biblioteca biblioteca = new Biblioteca();
 
-        for (Categoria categoria :Categoria.values()) {
+        for (Categoria categoria : Categoria.values()) {
             System.out.println(categoria);
         }
 
         System.out.print("Ingresar Categoria :");
-        String valor  = scanner.next();
+        String valor = scanner.next();
         scanner.nextLine();
 
         Categoria cat = Categoria.valueOf(valor.toUpperCase());
 
         // LIBROS
         Libro libro1 = new Libro(1, "Culpa Nuestra", "Mercedes Room", cat, true);
-        Libro libro2 =  new Libro(2, "El Principito", "Antoine de Saint-Exupéry",cat, false);
-        Libro libro3 =  new Libro(3, "Cien años de soledad", "Gabriel García Márquez", cat, true);
-        Libro libro4 =  new Libro(4, "Clean Code", "Robert C. Martin", cat, true);
-        Libro libro5 =  new Libro(5, "Harry Potter y la piedra filosofal", "J.K. Rowling", cat, true);
-        Libro libro6 =  new Libro(6, "Los cuatro acuerdos", "Don Miguel Ruiz", cat , true);
+        Libro libro2 = new Libro(2, "El Principito", "Antoine de Saint-Exupéry", cat, false);
+        Libro libro3 = new Libro(3, "Cien años de soledad", "Gabriel García Márquez", cat, true);
+        Libro libro4 = new Libro(4, "Clean Code", "Robert C. Martin", cat, true);
+        Libro libro5 = new Libro(5, "Harry Potter y la piedra filosofal", "J.K. Rowling", cat, true);
+        Libro libro6 = new Libro(6, "Los cuatro acuerdos", "Don Miguel Ruiz", cat, true);
 
-        // USUARIO 
+        // USUARIO
         Usuario usuario1 = new Usuario(1, "Antonella");
         Usuario usuario2 = new Usuario(2, "Ana Torres");
         Usuario usuario3 = new Usuario(3, "Luis Gómez");
@@ -56,9 +58,17 @@ public class Main {
         biblioteca.registrarUsuario(usuario6);
 
         // LISTA DE LIBROS PRESTADO SEGUN EL USUARIO
-        biblioteca.prestarLibro(1, 3);
-        biblioteca.prestarLibro(1, 4);
+        try {
+            biblioteca.prestarLibro(1, 3);
+            biblioteca.prestarLibro(1, 4);
 
+        } catch (UsuarioNoEncontradoException e) {
+            System.out.println(e.getMessage());
+        } catch (LibroNoEncontradoException e) {
+            System.out.println(e.getMessage());
+        } catch (LibroNoDisponibleException e) {
+            System.out.println(e.getMessage());
+        }
 
         // BUSCASR LIBRO MEDIANTE ID O TITULO , ADEMAS PUEDE BUSCAR USUARIO MEDIANTE ID
 
@@ -66,18 +76,21 @@ public class Main {
         System.out.println("2: Buscar usuario por ID");
         System.out.println("3: Buscar Libro por TItulo");
         System.out.println("4: Prestar Libro :");
+        System.out.println("5: Devolver Libro :");
         System.out.println("************* Ingresar Opcion : ******************** ");
-        
+
         int opcion = scanner.nextInt();
         scanner.nextLine();
-        int id = 0 ; 
-        String titulo; 
+        int id = 0;
+        String titulo;
+        int idUsuario;
+        int idLibro;
         switch (opcion) {
             case 1:
                 System.out.println("INGRESAR ID DE LIBRO: ");
                 id = scanner.nextInt();
                 scanner.nextLine();
-                biblioteca.buscarLibroPorId(id);    
+                biblioteca.buscarLibroPorId(id);
                 break;
             case 2:
                 System.out.println("INGRESAR ID DE USUARIO : ");
@@ -91,34 +104,42 @@ public class Main {
                 biblioteca.buscarLibroPorTitulo(titulo);
                 break;
             case 4:
-                System.out.println("LISTA DE LIBROS: ");
-                biblioteca.mostrarCatalogo();
-                System.out.println("LISTA DE USUARIOS: ");
-                biblioteca.mostraUsuarios();
-
-                System.out.println("PRESTAR LIBRO:");
-                int idUsuario = scanner.nextInt();
-                scanner.nextLine();
-                int idLibro = scanner.nextInt();
-                scanner.nextLine();
             
-                biblioteca.prestarLibro(idUsuario, idLibro);
-            break;
+            try {
+                    System.out.println("LISTA DE LIBROS: ");
+                    biblioteca.mostrarCatalogo();
+                    System.out.println("LISTA DE USUARIOS: ");
+                    biblioteca.mostraUsuarios();
+                    System.out.println("PRESTAR LIBRO:");
+                    idUsuario = scanner.nextInt();
+                    scanner.nextLine();
+                    idLibro = scanner.nextInt();
+                    scanner.nextLine();
+
+                    biblioteca.prestarLibro(idUsuario, idLibro);
+
+                } catch (UsuarioNoEncontradoException e) {
+                    System.out.println(e.getMessage());
+                } catch (LibroNoEncontradoException e) {
+                    System.out.println(e.getMessage());
+                } catch (LibroNoDisponibleException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
             case 5:
                 System.out.println("DEVOLVER LIBRO ");
-                idUsuario = scanner.nextInt();
-                idLibro= scanner.nextInt();
-                
-                biblioteca.devolverLibro(idUsuario, idLibro);
-            break;
+                try {
+                    idUsuario = scanner.nextInt();
+                    idLibro = scanner.nextInt();
+                    biblioteca.devolverLibro(idUsuario, idLibro);
+
+                } catch (LibroNoEncontradoException e) {
+                    System.out.println(e.getMessage());
+                } catch (UsuarioNoEncontradoException e) {
+                    System.out.println(e.getMessage());
+                }
+                break;
         }
-
-
-
-
-
-
-
 
     }
 }
