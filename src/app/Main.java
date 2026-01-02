@@ -13,133 +13,241 @@ import service.Biblioteca;
 public class Main {
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+
         Biblioteca biblioteca = new Biblioteca();
+        boolean condicional = true;
+        int opcion = 0;
+        do {
 
-        for (Categoria categoria : Categoria.values()) {
-            System.out.println(categoria);
+            Scanner scanner = new Scanner(System.in);
+            menu();
+            System.out.print("INGRESAR UNA OPCION : ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    biblioteca.registrarLibro(registrarLibro());
+                    break;
+                case 2:
+                    biblioteca.registrarUsuario(registrarUsuario());
+                    break;
+                case 3:
+                    listaDeLibros(biblioteca);
+                    break;
+                case 4:
+                    listaDeUsuarios(biblioteca);
+                    break;
+                case 5:
+                    buscarUsuarioPorId(biblioteca);
+                    break;
+                case 6:
+                    buscarLibroPorId(biblioteca);
+                    break;
+                case 7:
+                    buscarLibroPorTitulo(biblioteca);
+                    break;
+                case 8:
+                    prestarLibro(biblioteca);
+                    break;
+                case 9:
+                    devolverLibro(biblioteca);
+                    break;
+
+                default:
+                    System.out.println("====  CERRANDO SISTEMA  ====");
+                    condicional = false;
+                    break;
+            }
+
+            if (condicional) {
+                System.out.println("========================================================");
+                System.out.println("========   DESEAS CONTINUAR CON OTRA CONSULTA   ========");
+                System.out.println("========================================================");
+
+                System.out.print("INGRESAR (true/ false) : ");
+                condicional = scanner.nextBoolean();
+                scanner.nextLine();
+            }
+
+        } while (condicional);
+
+    }
+
+    public static void menu() {
+        System.out.println("========================================================");
+        System.out.println("=====             MENÚ DE BIBLIOTECA               =====");
+        System.out.println("========================================================");
+
+        System.out.println("========================================================");
+        System.out.println("========================================================");
+        System.out.println("1.- Registrar Libro");
+        System.out.println("2.- Registrar Usuario");
+        System.out.println("3.- Mostrar Catalogo de Libros");
+        System.out.println("4.- Mostrar Usuarios");
+        System.out.println("5.- Buscar Usuarios por ID");
+        System.out.println("6.- Buscar Libro por ID");
+        System.out.println("7.- Buscar Libro por Titulo");
+        System.out.println("8.- Prestar Libro");
+        System.out.println("9.- Devolver Libro");
+        System.out.println("10.- Salir");
+        System.out.println("========================================================");
+        System.out.println("========================================================");
+
+    }
+
+    public static void listaCategorias(){
+
+        System.out.println("========================================================");
+        System.out.println("=====              LISTA DE CATEGIRIAS             =====");
+        System.out.println("========================================================");
+
+        int posicion = 0;
+        
+        for (Categoria  categoria : Categoria.values()) {
+            posicion++;
+            System.out.println( posicion + " : "  + categoria);
         }
+        System.out.println("========================================================");
+    }
 
-        System.out.print("Ingresar Categoria :");
-        String valor = scanner.next();
+    public static Libro registrarLibro() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("========================================================");
+        System.out.println("=====           INGRESAR DATOS DEL LIBRO           =====");
+        System.out.println("========================================================");
+
+        listaCategorias();
+
+        System.out.print("INGRESAR ID LIBRO                 : ");
+        int id = scanner.nextInt();
         scanner.nextLine();
+        System.out.print("INGRESAR EL TITULO                : ");
+        String titulo = scanner.nextLine();
+        System.out.print("INGRESAR EL AUTOR                 : ");
+        String autor = scanner.nextLine();
+        System.out.print("INGRESAR CATEGORIA                : ");
+        String tipoCategoria = scanner.nextLine();
+        Categoria categoria = Categoria.valueOf(tipoCategoria.toUpperCase());
+        System.out.print("INGRESAR ESTADO ( true / false )  : ");
+        boolean estado = scanner.nextBoolean();
 
-        Categoria cat = Categoria.valueOf(valor.toUpperCase());
+        Libro libro = new Libro(id, titulo, autor, categoria, estado);
+        return libro;
+    }
 
-        // LIBROS
-        Libro libro1 = new Libro(1, "Culpa Nuestra", "Mercedes Room", cat, true);
-        Libro libro2 = new Libro(2, "El Principito", "Antoine de Saint-Exupéry", cat, false);
-        Libro libro3 = new Libro(3, "Cien años de soledad", "Gabriel García Márquez", cat, true);
-        Libro libro4 = new Libro(4, "Clean Code", "Robert C. Martin", cat, true);
-        Libro libro5 = new Libro(5, "Harry Potter y la piedra filosofal", "J.K. Rowling", cat, true);
-        Libro libro6 = new Libro(6, "Los cuatro acuerdos", "Don Miguel Ruiz", cat, true);
+    public static Usuario registrarUsuario() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("========================================================");
+        System.out.println("=====           INGRESAR DATOS DEL USUARIO         =====");
+        System.out.println("========================================================");
 
-        // USUARIO
-        Usuario usuario1 = new Usuario(1, "Antonella");
-        Usuario usuario2 = new Usuario(2, "Ana Torres");
-        Usuario usuario3 = new Usuario(3, "Luis Gómez");
-        Usuario usuario4 = new Usuario(4, "María Quispe");
-        Usuario usuario5 = new Usuario(5, "Carlos Rivas");
-        Usuario usuario6 = new Usuario(6, "Sofía Mendoza");
+        System.out.print("INGRESAR ID DE USUARIO : ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+        System.out.print("INGRESAR NOMBRE        : ");
+        String nombreUsuario = scanner.nextLine();
 
-        // AGREGAR USUAIOR Y LIBROS
+        Usuario usuario = new Usuario(id, nombreUsuario);
+        return usuario;
 
-        biblioteca.registrarLibro(libro1);
-        biblioteca.registrarUsuario(usuario1);
-        biblioteca.registrarLibro(libro2);
-        biblioteca.registrarUsuario(usuario2);
-        biblioteca.registrarLibro(libro3);
-        biblioteca.registrarUsuario(usuario3);
-        biblioteca.registrarLibro(libro4);
-        biblioteca.registrarUsuario(usuario4);
-        biblioteca.registrarLibro(libro5);
-        biblioteca.registrarUsuario(usuario5);
-        biblioteca.registrarLibro(libro6);
-        biblioteca.registrarUsuario(usuario6);
+    }
 
-        // LISTA DE LIBROS PRESTADO SEGUN EL USUARIO
+    public static void listaDeLibros(Biblioteca biblioteca) {
+        System.out.println("========================================================");
+        System.out.println("=====              LISTA DE LIBROS                 =====");
+        System.out.println("========================================================");
+        biblioteca.mostrarCatalogo();
+    }
+
+    public static void listaDeUsuarios(Biblioteca biblioteca) {
+        System.out.println("========================================================");
+        System.out.println("=====              LISTA DE USUARIOS               =====");
+        System.out.println("========================================================");
+        biblioteca.mostraUsuarios();
+    }
+
+    public static void buscarUsuarioPorId(Biblioteca biblioteca) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("========================================================");
+        System.out.println("=====          BUSCAR USUARIO POR ID               =====");
+        System.out.println("========================================================");
+        System.out.print("INGRESAR ID : ");
+        int idUsuario = scanner.nextInt();
+        scanner.nextLine();
+        biblioteca.buscarUsuarioPorId(idUsuario);
+    }
+
+    public static void buscarLibroPorId(Biblioteca biblioteca) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("========================================================");
+        System.out.println("=====            BUSCAR LIBRO POR ID               =====");
+        System.out.println("========================================================");
+        System.out.print("INGRESAR ID : ");
+        int idLibro = scanner.nextInt();
+        scanner.nextLine();
+        biblioteca.buscarLibroPorId(idLibro);
+    }
+
+    public static void buscarLibroPorTitulo(Biblioteca biblioteca) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("========================================================");
+        System.out.println("=====            BUSCAR LIBRO POR TITULO           =====");
+        System.out.println("========================================================");
+        System.out.print("INGRESAR TITULO : ");
+        String tituloLibro = scanner.nextLine();
+
+        biblioteca.buscarLibroPorTitulo(tituloLibro);
+    }
+
+    public static void prestarLibro(Biblioteca biblioteca) {
         try {
-            biblioteca.prestarLibro(1, 3);
-            biblioteca.prestarLibro(1, 4);
+            Scanner scanner = new Scanner(System.in);
+            biblioteca.mostrarCatalogo();
+            biblioteca.mostraUsuarios();
+            System.out.println("========================================================");
+            System.out.println("=====                  PRESTAR LIBRO               =====");
+            System.out.println("========================================================");
+            System.out.print("INGRESAR ID DE LIBRO   : ");
+            int idCatalogo = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("INGRESAR ID DE USUARIO : ");
+            int idUsuario = scanner.nextInt();
+            scanner.nextLine();
+
+            biblioteca.prestarLibro(idUsuario, idCatalogo);
+
+        } catch (UsuarioNoEncontradoException e) {
+            System.out.println(e.getMessage());
+        } catch (LibroNoDisponibleException e) {
+            System.out.println(e.getMessage());
+        } catch (LibroNoEncontradoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void devolverLibro(Biblioteca biblioteca) {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            biblioteca.mostrarCatalogo();
+            biblioteca.mostraUsuarios();
+            System.out.println("========================================================");
+            System.out.println("=====                  DEVOLVER LIBRO              =====");
+            System.out.println("========================================================");
+            System.out.print("INGRESAR ID DE LIBRO   : ");
+            int idCatalogo = scanner.nextInt();
+            scanner.nextLine();
+            System.out.print("INGRESAR ID DE USUARIO : ");
+            int idUsuario = scanner.nextInt();
+            scanner.nextLine();
+
+            biblioteca.devolverLibro(idUsuario, idCatalogo);
 
         } catch (UsuarioNoEncontradoException e) {
             System.out.println(e.getMessage());
         } catch (LibroNoEncontradoException e) {
             System.out.println(e.getMessage());
-        } catch (LibroNoDisponibleException e) {
-            System.out.println(e.getMessage());
         }
-
-        // BUSCASR LIBRO MEDIANTE ID O TITULO , ADEMAS PUEDE BUSCAR USUARIO MEDIANTE ID
-
-        System.out.println("1: Buscar Libro por ID");
-        System.out.println("2: Buscar usuario por ID");
-        System.out.println("3: Buscar Libro por TItulo");
-        System.out.println("4: Prestar Libro :");
-        System.out.println("5: Devolver Libro :");
-        System.out.println("************* Ingresar Opcion : ******************** ");
-
-        int opcion = scanner.nextInt();
-        scanner.nextLine();
-        int id = 0;
-        String titulo;
-        int idUsuario;
-        int idLibro;
-        switch (opcion) {
-            case 1:
-                System.out.println("INGRESAR ID DE LIBRO: ");
-                id = scanner.nextInt();
-                scanner.nextLine();
-                biblioteca.buscarLibroPorId(id);
-                break;
-            case 2:
-                System.out.println("INGRESAR ID DE USUARIO : ");
-                id = scanner.nextInt();
-                scanner.nextLine();
-                biblioteca.buscarUsuarioPorId(id);
-                break;
-            case 3:
-                System.out.println("INGRESAR TITULO DE LIBRO: ");
-                titulo = scanner.nextLine();
-                biblioteca.buscarLibroPorTitulo(titulo);
-                break;
-            case 4:
-            
-            try {
-                    System.out.println("LISTA DE LIBROS: ");
-                    biblioteca.mostrarCatalogo();
-                    System.out.println("LISTA DE USUARIOS: ");
-                    biblioteca.mostraUsuarios();
-                    System.out.println("PRESTAR LIBRO:");
-                    idUsuario = scanner.nextInt();
-                    scanner.nextLine();
-                    idLibro = scanner.nextInt();
-                    scanner.nextLine();
-
-                    biblioteca.prestarLibro(idUsuario, idLibro);
-
-                } catch (UsuarioNoEncontradoException e) {
-                    System.out.println(e.getMessage());
-                } catch (LibroNoEncontradoException e) {
-                    System.out.println(e.getMessage());
-                } catch (LibroNoDisponibleException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-            case 5:
-                System.out.println("DEVOLVER LIBRO ");
-                try {
-                    idUsuario = scanner.nextInt();
-                    idLibro = scanner.nextInt();
-                    biblioteca.devolverLibro(idUsuario, idLibro);
-
-                } catch (LibroNoEncontradoException e) {
-                    System.out.println(e.getMessage());
-                } catch (UsuarioNoEncontradoException e) {
-                    System.out.println(e.getMessage());
-                }
-                break;
-        }
-
     }
+
 }

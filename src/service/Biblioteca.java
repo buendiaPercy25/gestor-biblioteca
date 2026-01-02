@@ -77,20 +77,40 @@ public class Biblioteca {
     }
 
     // Registrar objeto y confirmar si el objeto ya existe.
-    public void registrarLibro(Libro libro) {
-        if (!catalogo.contains(libro)) {
-            catalogo.add(libro);
+    public void registrarLibro(Libro nuevoLibro) {
+        boolean existe  = false;
+
+        for (Libro libro : catalogo) {
+            if (libro.getId() == nuevoLibro.getId() ) {
+                existe = true;
+                break;
+            }
+        }
+        if (!existe) {
+            catalogo.add(nuevoLibro);
+            System.out.println("==== LIBRO REGISTRADO. ====");
+        }else{
+            System.out.println("==== LIBRO YA EXISTE. ====");
         }
     }
 
-    public void registrarUsuario(Usuario usuario) {
-        if (!usuarios.contains(usuario)) {
-            usuarios.add(usuario);
+    public void registrarUsuario(Usuario usuarioNuevo) {
+        boolean existe = false;
+        for (Usuario usuario : usuarios) {
+            if (usuario.getId() == usuarioNuevo.getId()) {
+                existe = true;
+                break;
+            }
+        }
+        if (!existe) {
+            usuarios.add(usuarioNuevo);
+            System.out.println("==== USUARIO REGISTRADO. ====");
+        }else{
+            System.out.println("==== USUARIO YA EXISTE. ====");
         }
     }
 
     public void mostrarCatalogo() {
-        System.out.println("Catalogo de Libros: ");
         for (Libro libro : catalogo) {
             System.out.println("ID : " + libro.getId() + " - TITULO : " + libro.getTitulo() + " - AUTOR : " + libro.getAutor() + " - ESTADO : " + libro.isEstado());
         }
@@ -105,10 +125,10 @@ public class Biblioteca {
     public void buscarLibroPorId(int id) {
         for (Libro libro : catalogo) {
             if (libro.getId() == id) {
-                System.out.println("Libro Encontrado : ");
-                System.out.println(libro.getAutor());
-                System.out.println(libro.getTitulo());
-                System.out.println(libro.getCategoria());
+                System.out.println("==== LIBRO ENCONTRADO ====");
+                System.out.println("AUTOR     : " + libro.getAutor());
+                System.out.println("TITULO    : " + libro.getTitulo());
+                System.out.println("CATEGORIA : " + libro.getCategoria());
                 break;
             }
         }
@@ -117,8 +137,8 @@ public class Biblioteca {
     public void buscarUsuarioPorId(int id) {
         for (Usuario usuario : usuarios) {
             if (usuario.getId() == id) {
-                System.out.println("Usuario Encontrado : ");
-                System.out.println(usuario.getNombre());
+                System.out.println("==== USUARIO ENCONTRADO ====");
+                System.out.println("NOMBRE : "+ usuario.getNombre());
                 break;
             }
         }
@@ -128,10 +148,10 @@ public class Biblioteca {
     public void buscarLibroPorTitulo(String titulo) {
         for (Libro libro : catalogo) {
             if (libro.getTitulo().equals(titulo)) {
-                System.out.println("Libro Encontrado : ");
-                System.out.println(libro.getAutor());
-                System.out.println(libro.getTitulo());
-                System.out.println(libro.getCategoria());
+                System.out.println("==== LIBRO ENCONTRADO ====");
+                System.out.println("AUTOR     : " + libro.getAutor());
+                System.out.println("TITULO    : " + libro.getTitulo());
+                System.out.println("CATEGORIA : " + libro.getCategoria());
                 break;
             }
         }

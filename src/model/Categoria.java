@@ -1,10 +1,22 @@
 package model;
 
 public enum Categoria {
-    NOVELA,
-    CIENCIA,
-    HISTORIA,
-    TECNOLOGIA,
-    INFANTIL;
+    NOVELA("novela"),
+    CIENCIA("ciencia"),
+    HISTORIA("historia"),
+    TECNOLOGIA("tecnologia"),
+    INFANTIL("infantil");
 
+    private String nombreCategoria;
+
+    Categoria(String nombreCategirua){
+        this.nombreCategoria = nombreCategirua;
+    }
+
+    public String getNombreCategoria() {
+        return nombreCategoria;
+    }
+
+    
 }
+
